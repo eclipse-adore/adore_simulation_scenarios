@@ -50,7 +50,7 @@ def generate_launch_description():
             start_pose=(604731.230, 5797112.750, 0.0),
             goal_position=(604791.7, 5797180.0),
             vehicle_id=222,
-            v2x_id=0,
+            v2x_id=222,
             model_file=vehicle_model_file,
             map_file=map_file,
             shape=(4.5, 2.0, 2.0)

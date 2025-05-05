@@ -26,6 +26,7 @@ def generate_launch_description():
             map_file=map_file,
             model_file=vehicle_model_file,
             controllable=True,
+            optinlc_route_following = True,
             v2x_id=0,
             vehicle_id=0,
             controller=1,
