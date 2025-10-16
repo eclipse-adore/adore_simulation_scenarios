@@ -25,7 +25,8 @@ def generate_launch_description():
         *create_visualization_nodes(
             whitelist=["ego_vehicle"],
             asset_folder=map_image_folder,
-            use_center_ego=True
+            visualization_offset=(606453.910, 5797315.369),
+
         ),
 
         *create_simulated_vehicle_nodes(
