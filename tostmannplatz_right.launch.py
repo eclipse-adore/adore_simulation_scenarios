@@ -50,7 +50,7 @@ def generate_launch_description():
             controllable=True,
             v2x_id=0,
             vehicle_id=0,
-            controller=1,
+            controller=2,
             debug=False
         )
     ])
