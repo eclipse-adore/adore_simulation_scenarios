@@ -77,9 +77,6 @@ def create_simulated_vehicle(
     "lookahead_time": 0.0
     }
 
-    print(type(start_pose_utm[3]))
-    print(goal_position_utm[0])
-    print(goal_position_utm[1])
     return [
         Node(
             package="simulated_vehicle",
