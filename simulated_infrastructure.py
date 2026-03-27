@@ -11,33 +11,41 @@
 # SPDX-License-Identifier: EPL-2.0
 # ********************************************************************************
 
+from __future__ import annotations
+
+from typing import Any, Dict, List, Optional, Tuple
+
+from launch import Action
 from launch_ros.actions import Node
 
-# example only
-simulated_v2x_topic_parameters = {
-    "planned_traffic_out_topic": "v2x_planned_traffic",
-    "traffic_participant_in_topic": "v2x_traffic_participant",
-}
-topic_parameters = {
-    "planned_traffic_out_topic": "/planned_traffic",
-    "traffic_participant_in_topic": "traffic_participant",
-}
+import os
+import sys
+import utm
 
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if base_dir not in sys.path:
+    sys.path.insert(0, base_dir)
 
-def with_topic_params(*param_dicts: dict, topic_params) -> list[dict]:
+launch_file_dir = os.path.dirname(os.path.realpath(__file__))
+vehicle_parameters_folder = os.path.abspath(os.path.join(launch_file_dir, "../assets/vehicle_params/"))
+maps_folder = os.path.abspath(os.path.join(launch_file_dir, "../assets/tracks/"))
 
-    return list(param_dicts) + [topic_params]
+def create_simulated_infrastructure(
+    infrastructure_position_utm: Tuple[float, float, int, str, float],
+    polygon_utm: list[Tuple[float, float, int, str, float]],
+    map_file: str = "de_bs_borders_wfs.r2sr",
+) -> List[Action]:
 
+    validity_polygon_in_utm = []
+    for point in polygon_utm:
+        validity_polygon_in_utm.append(point[0])
+        validity_polygon_in_utm.append(point[1])
 
-def create_infrastructure_nodes(position: tuple[float, float],
-                                polygon: list[float],
-                                map_file: str,
-                                simulated_v2x_mode: bool = False,
-                                debug=True) -> list[Node]:
-    x, y = position
-    topic_params = topic_parameters
-    if simulated_v2x_mode:
-        topic_params = simulated_v2x_topic_parameters
+    multi_agent_pid_planner_parameters = {
+        "preview_distance": 4.5,
+        "k_yaw": 2.0,
+        "k_distance": 1.0
+    }
 
     return [
         Node(
@@ -45,16 +53,20 @@ def create_infrastructure_nodes(position: tuple[float, float],
             namespace='infrastructure',
             executable='decision_maker_infrastructure',
             name='decision_maker_infrastructure',
-            parameters=with_topic_params(
-                {"map file": map_file},
-                {"infrastructure_position_x": x},
-                {"infrastructure_position_y": y},
-                {"debug": debug},
-                {"validity_polygon": polygon},
-                {"multi_agent_PID_settings_keys": ["preview_distance", "k_yaw", "k_distance"]
-                 },
-                {"multi_agent_PID_settings_values": [4.5, 2.0, 1.0]
-                 }, topic_params=topic_params
-            ),
+            parameters=[
+                {"map file": maps_folder + "/" + map_file},
+                {"infrastructure_position_x": infrastructure_position_utm[0]},
+                {"infrastructure_position_y": infrastructure_position_utm[1]},
+                {"infrastructure_yaw": infrastructure_position_utm[4]},
+                {"max_participant_age": 0.5},
+                {"max_route_length": 200.0},
+                {"route_replan_dist": 5.0}, # If the vehicle deviates with more than 5m from its route, it recalculates
+                {"local_map_size": 200.0},
+                {"should_publish_local_map": True}, # only used for visualization
+                {"debug": True},
+                {"validity_polygon": validity_polygon_in_utm},
+                {"multi_agent_PID_settings_keys": list(multi_agent_pid_planner_parameters.keys())},
+                {"multi_agent_PID_settings_values": list(multi_agent_pid_planner_parameters.values())},
+            ],
         )
     ]
