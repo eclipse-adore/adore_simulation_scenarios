@@ -34,8 +34,4 @@ def generate_launch_description():
             vehicle_id=111,
             v2x_id=0,
         ),
-        *create_visualizer(
-            whitelist=["ego_vehicle"],
-            visualization_offset=start_position.get_utm_coordinates(),
-        )
     ])
