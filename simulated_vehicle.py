@@ -29,6 +29,7 @@ if base_dir not in sys.path:
 launch_file_dir = os.path.dirname(os.path.realpath(__file__))
 vehicle_parameters_folder = os.path.abspath(os.path.join(launch_file_dir, "../assets/vehicle_params/"))
 maps_folder = os.path.abspath(os.path.join(launch_file_dir, "../assets/tracks/"))
+odd_folder = os.path.abspath(os.path.join(launch_file_dir, "../assets/odd/"))
 
 def create_simulated_vehicle(
     namespace: str,
@@ -93,6 +94,15 @@ def create_simulated_vehicle(
                 {"v2x_id": v2x_id},
                 {"controllable": controllable},
                 {"vehicle_model_file": vehicle_parameters_folder + "/" + vehicle_parameters_file},
+            ],
+        ),
+        Node(
+            package="operational_design_domain",
+            executable="operational_design_domain",
+            name="operational_design_domain",
+            namespace=namespace,
+            parameters=[
+                {"openodd_file": odd_folder + "/" + "simulation_odd.json" },
             ],
         ),
         Node(
