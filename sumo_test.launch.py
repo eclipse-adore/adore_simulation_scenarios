@@ -22,8 +22,8 @@ from position import Position
 from simulated_vehicle import create_simulated_vehicle
 from visualizer import create_visualizer
 
-start_position = Position(lat_long=(52.315849, 10.562169), psi=0.0)
-goal_position = Position(lat_long=(52.314444, 10.561929))
+start_position = Position(xy=(50.0, 0.0), psi=3.14/2)
+goal_position  = Position(xy=(-50.0, 0.0))
 
 SOURCE_DIRECTORY = os.environ["SOURCE_DIRECTORY"]
 SUMO_CONFIG_DIRECTORY = os.environ["SUMO_CONFIG_DIRECTORY"]
@@ -50,8 +50,8 @@ def generate_launch_description():
             name='sumo_bridge',
             output='screen',
             parameters=[
-    {"sumo_config_file": SUMO_CONFIG_PATH},
-    {"use_gui": True}
+               {"sumo_config_file": SUMO_CONFIG_PATH},
+               {"use_gui": True}
             ],
         ),
     ])
