@@ -16,7 +16,7 @@ from launch_ros.actions import Node
 
 import sys
 import os
-sys.path.append(os.path.dirname(__file__)) # this line is very importatnt to find the helper functions
+sys.path.append(os.path.dirname(__file__)) # this line is very important to find the helper functions
 
 from position import Position
 from simulated_vehicle import create_simulated_vehicle
@@ -28,7 +28,7 @@ def generate_launch_description():
     return LaunchDescription([
         *create_simulated_vehicle(
             namespace="ego_vehicle",
-            start_pose_utm=start_position.get_utm_coordinates(),
+            start_position_utm=start_position.get_utm_coordinates(),
             goals=[(606471.04, 5797161.11, 1),  # STOP
                    ],
             vehicle_id=111,

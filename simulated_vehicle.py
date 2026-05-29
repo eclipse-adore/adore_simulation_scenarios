@@ -33,7 +33,7 @@ odd_folder = os.path.abspath(os.path.join(launch_file_dir, "../assets/odd/"))
 
 def create_simulated_vehicle(
     namespace: str,
-    start_pose_utm: Tuple[float, float, int, str, float],
+    start_position_utm: Tuple[float, float, int, str, float],
     goals: List[Tuple[float, float, int]],
     vehicle_id: int,
     v2x_id: int,
@@ -88,11 +88,11 @@ def create_simulated_vehicle(
             name="simulated_vehicle",
             namespace=namespace,
             parameters=[
-                {"set_start_utm_position_x": start_pose_utm[0]},
-                {"set_start_utm_position_y": start_pose_utm[1]},
-                {"set_start_utm_zone_number": start_pose_utm[2]},
-                {"set_start_utm_zone_letter": start_pose_utm[3]},
-                {"set_start_psi": start_pose_utm[4]},
+                {"set_start_utm_position_x": start_position_utm[0]},
+                {"set_start_utm_position_y": start_position_utm[1]},
+                {"set_start_utm_zone_number": start_position_utm[2]},
+                {"set_start_utm_zone_letter": start_position_utm[3]},
+                {"set_start_psi": start_position_utm[4]},
                 {"vehicle_id": vehicle_id},
                 {"v2x_id": v2x_id},
                 {"controllable": controllable},

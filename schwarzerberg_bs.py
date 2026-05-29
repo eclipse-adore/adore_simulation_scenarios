@@ -29,7 +29,7 @@ def generate_launch_description():
     return LaunchDescription([
         *create_simulated_vehicle(
             namespace="ego_vehicle",
-            start_pose_utm=start_position.get_utm_coordinates(),
+            start_position_utm=start_position.get_utm_coordinates(),
             goal_position_utm=goal_position.get_utm_coordinates(),
             vehicle_id=111,
             v2x_id=0,

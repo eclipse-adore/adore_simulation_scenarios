@@ -27,21 +27,21 @@ def generate_launch_description():
     return LaunchDescription([
         *create_simulated_vehicle(
             namespace="ego_vehicle",
-            start_pose_utm=Position(lat_long=(52.314331, 10.53793), psi=3.14).get_utm_coordinates(),
+            start_position_utm=Position(lat_long=(52.314331, 10.53793), psi=3.14).get_utm_coordinates(),
             goal_position_utm=Position(lat_long=(52.314279, 10.54017), psi=0.0).get_utm_coordinates(),
             vehicle_id=111,
             v2x_id=111,
         ),
         *create_simulated_vehicle(
             namespace="second_vehicle",
-            start_pose_utm=Position(lat_long=(52.314319, 10.536283), psi=0.0).get_utm_coordinates(),
+            start_position_utm=Position(lat_long=(52.314319, 10.536283), psi=0.0).get_utm_coordinates(),
             goal_position_utm=Position(lat_long=(52.314937, 10.537309), psi=0.0).get_utm_coordinates(),
             vehicle_id=222,
             v2x_id=222,
         ),
         *create_simulated_vehicle(
             namespace="third_vehicle",
-            start_pose_utm=Position(lat_long=(52.314984, 10.53725), psi=-1.8).get_utm_coordinates(),
+            start_position_utm=Position(lat_long=(52.314984, 10.53725), psi=-1.8).get_utm_coordinates(),
             goal_position_utm=Position(lat_long=(52.314937, 10.537309), psi=0.0).get_utm_coordinates(),
             vehicle_id=333,
             v2x_id=333,

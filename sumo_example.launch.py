@@ -41,7 +41,7 @@ def generate_launch_description():
         ),
         *create_simulated_vehicle(
             namespace="ego_vehicle",
-            start_pose_utm=ego_utm,
+            start_position_utm=ego_utm,
             goals=[(*EGO_GOAL.get_utm_coordinates()[:2], 1)],  # STOP
             vehicle_id=EGO_VEHICLE_ID,
             v2x_id=EGO_VEHICLE_ID,
