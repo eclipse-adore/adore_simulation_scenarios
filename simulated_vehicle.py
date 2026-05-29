@@ -34,7 +34,7 @@ odd_folder = os.path.abspath(os.path.join(launch_file_dir, "../assets/odd/"))
 def create_simulated_vehicle(
     namespace: str,
     start_pose_utm: Tuple[float, float, int, str, float],
-    goal_position_utm: Tuple[float, float, int, str, float],
+    goals: List[Tuple[float, float, int]],
     vehicle_id: int,
     v2x_id: int,
     vehicle_parameters_file: str = "NGC.json",
@@ -78,6 +78,9 @@ def create_simulated_vehicle(
         "lookahead_time": 0.0
     }
 
+    goal_strings = [f"{x},{y},{stop}"
+                    for x, y, stop in goals]
+
     return [
         Node(
             package="simulated_vehicle",
@@ -112,8 +115,7 @@ def create_simulated_vehicle(
             namespace=namespace,
             parameters=[
                 {"map file": maps_folder + "/" + map_file},  # kept literal key as in original
-                {"goal_position_x": goal_position_utm[0]},
-                {"goal_position_y": goal_position_utm[1]},
+                {"goals": goal_strings},
                 {"local_map_size": 100.0},
                 # {"request_assistance_polygon": None},
             ],

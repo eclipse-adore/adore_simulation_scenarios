@@ -23,14 +23,14 @@ from simulated_vehicle import create_simulated_vehicle
 from visualizer import create_visualizer
 
 start_position = Position(lat_long=(52.315849, 10.562169), psi=0.0)
-goal_position = Position(lat_long=(52.314444, 10.561929), psi=0.0)
 
 def generate_launch_description():
     return LaunchDescription([
         *create_simulated_vehicle(
             namespace="ego_vehicle",
             start_pose_utm=start_position.get_utm_coordinates(),
-            goal_position_utm=goal_position.get_utm_coordinates(),
+            goals=[(606471.04, 5797161.11, 1),  # STOP
+                   ],
             vehicle_id=111,
             v2x_id=0,
         ),
