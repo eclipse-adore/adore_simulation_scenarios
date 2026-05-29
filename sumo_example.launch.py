@@ -27,8 +27,7 @@ SUMO_CONFIG_DIRECTORY = os.environ["SUMO_CONFIG_DIRECTORY"]
 SUMO_CONFIG_PATH      = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, "example_scenario/osm.sumocfg")
 GUI_SETTINGS_PATH     = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, "gui_settings.xml")
 
-EGO_START      = Position(lat_long=(52.314331, 10.53793), psi=3.14)
-EGO_GOAL       = Position(lat_long=(52.31463, 10.55909), psi=0.0)
+EGO_START      = Position(lat_long=(52.314366, 10.537373), psi=2.748)
 EGO_VEHICLE_ID = 111
 
 def generate_launch_description():
@@ -42,7 +41,25 @@ def generate_launch_description():
         *create_simulated_vehicle(
             namespace="ego_vehicle",
             start_pose_utm=ego_utm,
-            goal_position_utm=EGO_GOAL.get_utm_coordinates(),
+            goals=[(604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 1),  # STOP
+                  ],
             vehicle_id=EGO_VEHICLE_ID,
             v2x_id=EGO_VEHICLE_ID,
         ),
