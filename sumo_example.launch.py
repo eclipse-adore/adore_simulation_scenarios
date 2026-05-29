@@ -27,7 +27,8 @@ SUMO_CONFIG_DIRECTORY = os.environ["SUMO_CONFIG_DIRECTORY"]
 SUMO_CONFIG_PATH      = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, "example_scenario/osm.sumocfg")
 GUI_SETTINGS_PATH     = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, "gui_settings.xml")
 
-EGO_START      = Position(lat_long=(52.314366, 10.537373), psi=2.748)
+EGO_START      = Position(lat_long=(52.314331, 10.53793), psi=3.14)
+EGO_GOAL       = Position(lat_long=(52.31463, 10.55909), psi=0.0)
 EGO_VEHICLE_ID = 111
 
 def generate_launch_description():
@@ -41,25 +42,7 @@ def generate_launch_description():
         *create_simulated_vehicle(
             namespace="ego_vehicle",
             start_pose_utm=ego_utm,
-            goals=[(604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 1),  # STOP
-                  ],
+            goals=[(*EGO_GOAL.get_utm_coordinates()[:2], 1)],  # STOP
             vehicle_id=EGO_VEHICLE_ID,
             v2x_id=EGO_VEHICLE_ID,
         ),
@@ -70,17 +53,18 @@ def generate_launch_description():
             name='sumo_bridge',
             output='screen',
             parameters=[
-                {"sumo_config_file":           SUMO_CONFIG_PATH},
-                {"use_gui":                    True},
-                {"gui_settings_file":          GUI_SETTINGS_PATH},
-                {"gui_zoom":                   5000.0},
-                {"gui_follow_ego":             True},
-                {"ego_tracking_id":            EGO_VEHICLE_ID},
-                {"ego_vehicle_color":          "255,255,255"},
-                {"ego_start_position":         f"{ego_lat},{ego_lon},{ego_psi}"},
-                {"initial_traffic_count":      20},
-                {"initial_traffic_spacing":    10.0},
-                {"initial_traffic_veh_type":   "veh_passenger"},
+                {"sumo_config_file":          SUMO_CONFIG_PATH},
+                {"use_gui":                   True},
+                {"gui_settings_file":         GUI_SETTINGS_PATH},
+                {"gui_zoom":                  5000.0},
+                {"gui_follow_ego":            True},
+                {"ego_tracking_id":           EGO_VEHICLE_ID},
+                {"ego_vehicle_color":         "255,255,255"},
+                {"ego_start_position":        f"{ego_lat},{ego_lon},{ego_psi}"},
+                {"initial_traffic_count":     20},
+                {"initial_traffic_spacing":   10.0},
+                {"initial_traffic_speed":     0.0},
+                {"initial_traffic_veh_type":  "veh_passenger"},
             ],
         ),
     ])
