@@ -42,7 +42,7 @@ def generate_launch_description():
         *create_simulated_vehicle(
             namespace="ego_vehicle",
             start_pose_utm=ego_utm,
-            goal_position_utm=EGO_GOAL.get_utm_coordinates(),
+            goals=[(-50.0, 0.0, 1)],
             vehicle_id=EGO_VEHICLE_ID,
             v2x_id=0,
             map_file='circle50m.xodr',
