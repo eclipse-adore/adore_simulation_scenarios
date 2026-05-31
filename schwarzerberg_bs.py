@@ -10,27 +10,26 @@
 #
 # SPDX-License-Identifier: EPL-2.0
 # ********************************************************************************
-
 from launch import LaunchDescription
 from launch_ros.actions import Node
-
 import sys
 import os
-sys.path.append(os.path.dirname(__file__)) # this line is very importatnt to find the helper functions
-
-from position import Position
+sys.path.append(os.path.dirname(__file__))
+from position import Position, Waypoint, WaypointBehavior
 from simulated_vehicle import create_simulated_vehicle
 from visualizer import create_visualizer
 
 start_position = Position(lat_long=(52.291613, 10.516043), psi=-3.04)
-goal_position = Position(lat_long=(52.292296, 10.516745), psi=0.0)
+goal_positions = [
+    Waypoint(Position(utm=(603442.80, 5794632.34, 32, "U")), WaypointBehavior.STOP),
+]
 
 def generate_launch_description():
     return LaunchDescription([
         *create_simulated_vehicle(
             namespace="ego_vehicle",
             start_position_utm=start_position.get_utm_coordinates(),
-            goal_position_utm=goal_position.get_utm_coordinates(),
+            goals=goal_positions,
             vehicle_id=111,
             v2x_id=0,
         ),

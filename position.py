@@ -14,7 +14,23 @@
 from pyproj import Transformer
 import math
 from typing import Any, Dict, List, Optional, Tuple, Union
+from enum import IntEnum
 import utm
+
+class WaypointBehavior(IntEnum):
+    CONTINUE = 0
+    STOP     = 1
+
+
+class Waypoint:
+    def __init__(self, position: "Position", behavior: WaypointBehavior = WaypointBehavior.CONTINUE):
+        self.position = position
+        self.behavior = behavior
+
+    def to_goal_tuple(self) -> Tuple[float, float, int]:
+        utm_x, utm_y, *_ = self.position.get_utm_coordinates()
+        return (utm_x, utm_y, int(self.behavior))
+
 
 class Position:
     _DEFAULT_UTM_ZONE = 32

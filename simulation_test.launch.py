@@ -16,21 +16,23 @@ from launch_ros.actions import Node
 
 import sys
 import os
-sys.path.append(os.path.dirname(__file__)) # this line is very importatnt to find the helper functions
+sys.path.append(os.path.dirname(__file__))
 
-from position import Position
+from position import Position, Waypoint, WaypointBehavior
 from simulated_vehicle import create_simulated_vehicle
 from visualizer import create_visualizer
 
 start_position = Position(lat_long=(52.314572, 10.560468), psi=3.14)
-goal_position = Position(lat_long=(52.314569, 10.560382))
+goal_positions = [
+    Waypoint(Position(utm=(606365.29, 5797172.74, 32, "U")), WaypointBehavior.STOP),
+]
 
 def generate_launch_description():
     return LaunchDescription([
         *create_simulated_vehicle(
             namespace="ego_vehicle",
             start_position_utm=start_position.get_utm_coordinates(),
-            goal_position_utm=goal_position.get_utm_coordinates(),
+            goals=goal_positions,
             vehicle_id=111,
             v2x_id=0,
         ),

@@ -18,6 +18,8 @@ from typing import Any, Dict, List, Optional, Tuple
 from launch import Action
 from launch_ros.actions import Node
 
+from position import Waypoint
+
 import os
 import sys
 # import utm
@@ -34,7 +36,7 @@ odd_folder = os.path.abspath(os.path.join(launch_file_dir, "../assets/odd/"))
 def create_simulated_vehicle(
     namespace: str,
     start_position_utm: Tuple[float, float, int, str, float],
-    goals: List[Tuple[float, float, int]],
+    goals: List[Waypoint],
     vehicle_id: int,
     v2x_id: int,
     vehicle_parameters_file: str = "NGC.json",
@@ -79,7 +81,7 @@ def create_simulated_vehicle(
     }
 
     goal_strings = [f"{x},{y},{stop}"
-                    for x, y, stop in goals]
+                    for x, y, stop in (wp.to_goal_tuple() for wp in goals)]
 
     return [
         Node(

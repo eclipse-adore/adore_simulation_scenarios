@@ -18,7 +18,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(__file__))
 
-from position import Position
+from position import Position, Waypoint, WaypointBehavior
 from simulated_vehicle import create_simulated_vehicle
 from visualizer import create_visualizer
 
@@ -28,22 +28,24 @@ SUMO_CONFIG_FILE      = os.environ["SUMO_CONFIG_FILE"]
 SUMO_CONFIG_PATH      = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, SUMO_CONFIG_FILE)
 GUI_SETTINGS_PATH     = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, "gui_settings.xml")
 
-EGO_START      = Position(xy=(-52.0, 0.0), psi=-3.14/2)
-EGO_GOAL       = Position(xy=(0.0, 50.0))
-EGO_VEHICLE_ID = 111
+start_position = Position(xy=(-52.0, 0.0), psi=-3.14/2)
+goal_positions = [
+    Waypoint(Position(xy=(-50.0, 0.0)), WaypointBehavior.STOP),
+]
+vehicle_id = 111
 
 def generate_launch_description():
-    ego_utm = EGO_START.get_utm_coordinates()  # (x, y, zone, hemisphere, psi)
+    start_utm = start_position.get_utm_coordinates()
     return LaunchDescription([
         *create_visualizer(
             whitelist=["ego_vehicle"],
-            visualization_offset=ego_utm,
+            visualization_offset=start_utm,
         ),
         *create_simulated_vehicle(
             namespace="ego_vehicle",
-            start_position_utm=ego_utm,
-            goals=[(-50.0, 0.0, 1)],
-            vehicle_id=EGO_VEHICLE_ID,
+            start_position_utm=start_utm,
+            goals=goal_positions,
+            vehicle_id=vehicle_id,
             v2x_id=0,
             map_file='circle50m.xodr',
         ),
@@ -54,16 +56,16 @@ def generate_launch_description():
             name='sumo_bridge',
             output='screen',
             parameters=[
-                {"sumo_config_file":   SUMO_CONFIG_PATH},
-                {"use_gui":            True},
-                {"gui_settings_file":  GUI_SETTINGS_PATH},
-                {"gui_zoom":           100.0},
-                {"gui_follow_ego":     False},
-                {"ego_tracking_id":    EGO_VEHICLE_ID},
-                {"ego_vehicle_color":     "255,255,255"},
+                {"sumo_config_file":  SUMO_CONFIG_PATH},
+                {"use_gui":           True},
+                {"gui_settings_file": GUI_SETTINGS_PATH},
+                {"gui_zoom":          100.0},
+                {"gui_follow_ego":    False},
+                {"ego_tracking_id":   vehicle_id},
+                {"ego_vehicle_color": "255,255,255"},
                 {"use_geo_conversion": False},
-                {"utm_zone":           ego_utm[2]},
-                {"utm_letter":         ego_utm[3]},
+                {"utm_zone":          start_utm[2]},
+                {"utm_letter":        start_utm[3]},
             ],
         ),
     ])

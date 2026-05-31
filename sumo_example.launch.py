@@ -18,7 +18,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(__file__))
 
-from position import Position
+from position import Position, Waypoint, WaypointBehavior
 from simulated_vehicle import create_simulated_vehicle
 from visualizer import create_visualizer
 
@@ -27,42 +27,43 @@ SUMO_CONFIG_DIRECTORY = os.environ["SUMO_CONFIG_DIRECTORY"]
 SUMO_CONFIG_PATH      = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, "example_scenario/osm.sumocfg")
 GUI_SETTINGS_PATH     = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, "gui_settings.xml")
 
-EGO_START      = Position(lat_long=(52.314331, 10.53793), psi=3.14)
-EGO_GOAL       = Position(lat_long=(52.31463, 10.55909), psi=0.0)
-EGO_VEHICLE_ID = 111
+start_position = Position(lat_long=(52.314331, 10.53793), psi=3.14)
+goal_positions = [
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U"))),
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U"))),
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U"))),
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U"))),
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U"))),
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U"))),
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U"))),
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U"))),
+    Waypoint(Position(utm=(604633, 5797104, 32, "U"))),
+    Waypoint(Position(utm=(604730, 5797121, 32, "U")), WaypointBehavior.STOP),
+]
+vehicle_id = 111
 
 def generate_launch_description():
-    ego_utm = EGO_START.get_utm_coordinates()  # (x, y, zone, hemisphere, psi)
-    ego_lat, ego_lon, ego_psi = EGO_START.get_lat_long_coordinates()
+    start_utm = start_position.get_utm_coordinates()
+    ego_lat, ego_lon, ego_psi = start_position.get_lat_long_coordinates()
     return LaunchDescription([
         *create_visualizer(
             whitelist=["ego_vehicle"],
-            visualization_offset=ego_utm,
+            visualization_offset=start_utm,
         ),
         *create_simulated_vehicle(
             namespace="ego_vehicle",
-            start_position_utm=ego_utm,
-            goals=[(604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 0),  # CONTINUE
-                   (604633, 5797104, 0),  # CONTINUE
-                   (604730, 5797121, 1),  # STOP
-                  ],
-            vehicle_id=EGO_VEHICLE_ID,
-            v2x_id=EGO_VEHICLE_ID,
+            start_position_utm=start_utm,
+            goals=goal_positions,
+            vehicle_id=vehicle_id,
+            v2x_id=vehicle_id,
         ),
         Node(
             package='sumo_bridge',
@@ -71,19 +72,18 @@ def generate_launch_description():
             name='sumo_bridge',
             output='screen',
             parameters=[
-                {"sumo_config_file":          SUMO_CONFIG_PATH},
-                {"use_gui":                   True},
-                {"gui_settings_file":         GUI_SETTINGS_PATH},
-                {"gui_zoom":                  5000.0},
-                {"gui_follow_ego":            True},
-                {"ego_tracking_id":           EGO_VEHICLE_ID},
-                {"ego_vehicle_color":         "255,255,255"},
-                {"ego_start_position":        f"{ego_lat},{ego_lon},{ego_psi}"},
-                {"initial_traffic_count":      0},
-                {"initial_traffic_spacing":   10.0},
-                {"initial_traffic_speed":     0.0},
-                {"initial_traffic_veh_type":  "veh_passenger"},
-
+                {"sumo_config_file":         SUMO_CONFIG_PATH},
+                {"use_gui":                  True},
+                {"gui_settings_file":        GUI_SETTINGS_PATH},
+                {"gui_zoom":                 5000.0},
+                {"gui_follow_ego":           True},
+                {"ego_tracking_id":          vehicle_id},
+                {"ego_vehicle_color":        "255,255,255"},
+                {"ego_start_position":       f"{ego_lat},{ego_lon},{ego_psi}"},
+                {"initial_traffic_count":     0},
+                {"initial_traffic_spacing":  10.0},
+                {"initial_traffic_speed":    0.0},
+                {"initial_traffic_veh_type": "veh_passenger"},
             ],
         ),
     ])
