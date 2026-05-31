@@ -42,7 +42,25 @@ def generate_launch_description():
         *create_simulated_vehicle(
             namespace="ego_vehicle",
             start_position_utm=ego_utm,
-            goals=[(*EGO_GOAL.get_utm_coordinates()[:2], 1)],  # STOP
+            goals=[(604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 0),  # CONTINUE
+                   (604633, 5797104, 0),  # CONTINUE
+                   (604730, 5797121, 1),  # STOP
+                  ],
             vehicle_id=EGO_VEHICLE_ID,
             v2x_id=EGO_VEHICLE_ID,
         ),
@@ -61,10 +79,11 @@ def generate_launch_description():
                 {"ego_tracking_id":           EGO_VEHICLE_ID},
                 {"ego_vehicle_color":         "255,255,255"},
                 {"ego_start_position":        f"{ego_lat},{ego_lon},{ego_psi}"},
-                {"initial_traffic_count":     20},
+                {"initial_traffic_count":      0},
                 {"initial_traffic_spacing":   10.0},
                 {"initial_traffic_speed":     0.0},
                 {"initial_traffic_veh_type":  "veh_passenger"},
+
             ],
         ),
     ])

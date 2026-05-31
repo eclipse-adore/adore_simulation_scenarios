@@ -28,8 +28,8 @@ SUMO_CONFIG_FILE      = os.environ["SUMO_CONFIG_FILE"]
 SUMO_CONFIG_PATH      = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, SUMO_CONFIG_FILE)
 GUI_SETTINGS_PATH     = os.path.join(SOURCE_DIRECTORY, SUMO_CONFIG_DIRECTORY, "gui_settings.xml")
 
-EGO_START      = Position(xy=(50.0, 0.0), psi=3.14/2)
-EGO_GOAL       = Position(xy=(-50.0, 0.0))
+EGO_START      = Position(xy=(-52.0, 0.0), psi=-3.14/2)
+EGO_GOAL       = Position(xy=(0.0, 50.0))
 EGO_VEHICLE_ID = 111
 
 def generate_launch_description():
