@@ -77,7 +77,7 @@ def create_simulated_vehicle(
         "acceleration_threshold": 0.25,
         "velocity_threshold": 0.25,
         "constant_brake": -1.0,
-        "lookahead_time": 0.0
+        "lookahead_time": 0.3
     }
 
     goal_strings = [f"{x},{y},{stop}"
