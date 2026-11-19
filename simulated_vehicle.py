@@ -66,6 +66,7 @@ def create_simulated_vehicle(
     #map_file: str = "r2s_flightfield_edemissen_26022026_25832.r2sr",
     controllable: bool = True,
     sensor_range: float = 1000.0,
+    virtual_stops: Optional[List[Tuple[float, float, str]]] = None,
 ) -> List[Action]:
 
     """Create standalone ROS 2 nodes for the simulated vehicle stack."""
@@ -107,6 +108,18 @@ def create_simulated_vehicle(
     goal_strings = [f"{x},{y},{stop}"
                     for x, y, stop in (wp.to_goal_tuple() for wp in goals)]
 
+    mission_control_parameters: List[Dict[str, Any]] = [
+        {"map file": maps_folder + "/" + map_file},  # kept literal key as in original
+        {"goals": goal_strings},
+        {"local_map_size": 100.0},
+        # {"request_assistance_polygon": None},
+    ]
+
+    if virtual_stops:
+        mission_control_parameters.append(
+            {"virtual_stops": [f"{x},{y},{label}" for x, y, label in virtual_stops]}
+        )
+
     return [
         Node(
             package="simulated_vehicle",
@@ -141,12 +154,7 @@ def create_simulated_vehicle(
             executable="mission_control",
             name="mission_control",
             namespace=namespace,
-            parameters=[
-                {"map file": maps_folder + "/" + map_file},  # kept literal key as in original
-                {"goals": goal_strings},
-                {"local_map_size": 100.0},
-                # {"request_assistance_polygon": None},
-            ],
+            parameters=mission_control_parameters,
         ),
         Node(
             package="decision_maker",
